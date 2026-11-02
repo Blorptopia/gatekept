@@ -1,7 +1,11 @@
 # Gatekept
 See [Project website](https://blorptopia.dev/projects/gatekept) for more details
 
-## Running it locally
+## Running the mod
+1. Install [MelonLoader](https://melonwiki.xyz)
+2. Download [Gatekept](https://github.com/Blorptopia/gatekept/releases/tag/v1.0.0) and move it into your `Mods` folder
+## Building from source
+Note that you will need [MelonLoader](https://melonwiki.xyz) installed for the mod to load
 ```
 # Setup libraries
 mkdir Libs
