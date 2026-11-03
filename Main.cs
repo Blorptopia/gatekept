@@ -10,14 +10,14 @@ namespace Gatekept
         public const string Description = "Speedrunning the gatekept game";
         public const string Author = "Blorptopia";
         public const string Company = null;
-        public const string Version = "1.0.0";
+        public const string Version = "1.1.0";
         public const string DownloadLink = "https://github.com/blorptopia/gatekept";
     }
 
     public class Gatekept : MelonMod
     {
         private const string gameSceneName = "GameScene";
-        private double runDuration = 0;
+        private float runDuration = 0;
 
         public override void OnSceneWasInitialized(int buildindex, string sceneName)
         {
@@ -33,6 +33,9 @@ namespace Gatekept
             var scene = SceneManager.GetActiveScene();
             if (UnityEngine.Input.GetKeyDown(KeyCode.R))
             {
+				var resets = PlayerPrefs.GetInt("gatekept.resets", 0) + 1;
+				PlayerPrefs.SetInt("gatekept.resets", resets);
+				PlayerPrefs.Save();
                 SceneManager.LoadScene(scene.name);
             }
             var instance = Melon<Gatekept>.Instance;
@@ -44,13 +47,18 @@ namespace Gatekept
 
         public override void OnGUI()
         {
+			var text = "";
+			text += "<size=50><color=green>Current:  " + this.formatDuration(this.runDuration) + "\n<color=white>";
+
+			var bestTime = PlayerPrefs.GetFloat("gatekept.best", 0);
+			text += "Resets: " + PlayerPrefs.GetInt("gatekept.resets").ToString();
             var size = new UnityEngine.Rect(0, 0, 500, 500);
-            UnityEngine.GUI.Label(size, "<size=50>" + this.formatRunDuration());
+            UnityEngine.GUI.Label(size, text);
         }
-        private string formatRunDuration()
+        private string formatDuration(float duration)
         {
-            var minutes = Mathf.Floor((float)this.runDuration / 60);
-            var rawSeconds = (float)this.runDuration % 60;
+            var minutes = Mathf.Floor(duration / 60);
+            var rawSeconds = this.runDuration % 60;
             var seconds = Mathf.Floor(rawSeconds);
             var ms = Mathf.Floor((rawSeconds % 1) * 1000);
             return minutes + ":" + seconds + ":" + ms;
